@@ -24,11 +24,8 @@ module OmniAuth
       end
 
       def decoded
-        @decoded ||= ::JWT.decode(
-          request.params['jwt'],
-          options.secret,
-          options.algorithm
-        ).reduce(&:merge)
+        raise ClaimInvalid, 'missing location id' unless location_id.present?
+        @decoded ||= decoded_token
         check_validity
         @decoded
       end
@@ -56,7 +53,21 @@ module OmniAuth
           (Time.now.to_i - @decoded['iat']).abs > options.valid_within
       end
 
+      def location_id
+        request.params['location_id']
+      end
+
+      def decoded_token
+        ::JWT.decode(
+          request.params['jwt'],
+          # each location has a different secret
+          options.secret[location_id],
+          options.algorithm
+        ).reduce(&:merge)
+      end
+
       def callback_phase
+        pp 'WOWOWWOOW'
         super
       rescue ClaimInvalid => e
         fail! :claim_invalid, e

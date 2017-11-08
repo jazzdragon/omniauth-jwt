@@ -48,7 +48,7 @@ in. Other available options are:
 * **valid_within:** integer of how many seconds of time skew you will allow. Defaults to `nil`. If this
   is set, the `iat` claim becomes required and must be within the specified number of seconds of the
   current time. This helps to prevent replay attacks.
-  
+
 ### Authentication Process
 
 When you authenticate through `omniauth-jwt` you can send users to `/auth/jwt` and it will redirect
@@ -56,7 +56,7 @@ them to the URL specified in the `auth_url` option. From there, the provider mus
 and send it to the `/auth/jwt/callback` URL as a "jwt" parameter:
 
     /auth/jwt/callback?jwt=ENCODEDJWTGOESHERE
-    
+
 An example of how to do that in Sinatra:
 
 ```ruby
@@ -70,7 +70,7 @@ get '/login/sso/other-app' do
     email: current_user.email,
     iat: Time.now.to_i
   }
-  
+
   payload = JWT.encode(claims, ENV['SSO_SECRET'])
   redirect "http://other-app.com/auth/jwt/callback?jwt=#{payload}"
 end
