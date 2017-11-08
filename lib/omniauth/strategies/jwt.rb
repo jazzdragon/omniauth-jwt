@@ -67,7 +67,6 @@ module OmniAuth
       end
 
       def callback_phase
-        pp 'WOWOWWOOW'
         super
       rescue ClaimInvalid => e
         fail! :claim_invalid, e
