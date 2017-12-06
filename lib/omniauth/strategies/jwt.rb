@@ -69,6 +69,7 @@ module OmniAuth
       def callback_phase
         super
       rescue ClaimInvalid => e
+        env['omniauth.origin'] = request.params['origin']
         fail! :claim_invalid, e
       end
 
